@@ -1,7 +1,13 @@
-import { FileData } from '@/types/data.types'
-import { Accordion, AccordionItem, Checkbox, Divider } from '@nextui-org/react'
+import { FileData, FileType } from '@/types/data.types'
+import {
+  Accordion,
+  AccordionItem,
+  Checkbox,
+  CheckboxGroup,
+  Divider,
+} from '@nextui-org/react'
 import clsx from 'clsx'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ContextPanel } from '../ContextPanel/ContextPanel'
 import { FileCard } from '../FileCard'
 import { FolderCard } from '../FolderCard'
@@ -22,6 +28,16 @@ const iconMap = {
   audio: AudioFileIcon,
   image: ImageIcon,
 }
+
+// What file categories to expect
+const fileCategories: FileType[] = [
+  'folder',
+  'image',
+  'video',
+  'audio',
+  'document',
+  'pdf',
+]
 
 export type SearchResultProps = Omit<
   React.HTMLProps<HTMLDivElement>,
@@ -53,6 +69,11 @@ export const SearchResult: React.FC<SearchResultProps> = ({
     () => Object.fromEntries(files.map((file) => [file.id, file])),
     [files, selected],
   )
+
+  // derived state to indicate which file categories to show based on user selection
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => [
+    ...fileCategories,
+  ])
 
   const [directoriesGroup, filesGroup] = useMemo(
     () => [
@@ -118,6 +139,22 @@ export const SearchResult: React.FC<SearchResultProps> = ({
         </div>
       </div>
       <div className="mt-8">
+        {/* Checkbox group to select which file types to show */}
+        <div className={clsx('bg-gray-100 p-2 rounded-t-lg')}>
+          <CheckboxGroup
+            label="Select File types to show"
+            defaultValue={[...selectedCategories]}
+            onValueChange={setSelectedCategories}
+          >
+            <div className="flex w-full flex-wrap gap-12">
+              {fileCategories.map((category) => (
+                <Checkbox value={category}>{category}</Checkbox>
+              ))}
+            </div>
+          </CheckboxGroup>
+        </div>
+        <Divider />
+
         <Accordion
           isCompact
           hideIndicator
@@ -130,41 +167,43 @@ export const SearchResult: React.FC<SearchResultProps> = ({
             HeadingComponent={() => <></>}
           >
             <div className={clsx('max-h-[500px] overflow-y-auto')}>
-              {directoriesGroup.map((item, index) => (
-                <div key={index}>
-                  <div className={clsx('flex flex-row items-center')}>
-                    <FolderCard
-                      name={item.name}
-                      label={[
-                        'Folder',
-                        `${(item.children || []).length} items`,
-                      ]}
-                      selectedKeys={[]}
-                      itemProps={{
-                        onPress: () => onCheckboxChange(item.id),
-                        startContent: (
-                          <>
-                            <Checkbox
-                              className="pe-[16px]"
-                              isSelected={isItemSelected(item.id)}
-                              onValueChange={() => onCheckboxChange(item.id)}
-                            />
-                          </>
-                        ),
-                        hideIndicator: true,
-                      }}
-                    />
+              {selectedCategories.includes('folder') &&
+                directoriesGroup.map((item, index) => (
+                  <div key={index}>
+                    <div className={clsx('flex flex-row items-center')}>
+                      <FolderCard
+                        name={item.name}
+                        label={[
+                          'Folder',
+                          `${(item.children || []).length} items`,
+                        ]}
+                        selectedKeys={[]}
+                        itemProps={{
+                          onPress: () => onCheckboxChange(item.id),
+                          startContent: (
+                            <>
+                              <Checkbox
+                                className="pe-[16px]"
+                                isSelected={isItemSelected(item.id)}
+                                onValueChange={() => onCheckboxChange(item.id)}
+                              />
+                            </>
+                          ),
+                          hideIndicator: true,
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
               <Divider className="my-2" />
 
-              {filesGroup.map((item, index) => {
+              {filesGroup.map((item) => {
+                if (!selectedCategories.includes(item.type)) return null
                 const IconComponent = iconMap[item.type]
 
                 return (
-                  <div key={index}>
+                  <div key={item.name}>
                     <div className={clsx('flex flex-row items-center')}>
                       <FileCard
                         name={item.name}
