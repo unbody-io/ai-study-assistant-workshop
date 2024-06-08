@@ -40,7 +40,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             name: 'text-[16px]',
           }}
         />
-        <div className="flex-grow border border-gray-200 rounded-lg p-4 text-md bg-white shadow-sm mt-[-4px] flex justify-between items-start">
+        <div
+          className={`flex-grow border border-gray-200 rounded-lg p-4 text-md bg-white shadow-sm mt-[-4px] flex justify-between items-start ${role === 'assistant' ? 'flex-col' : ''}`}
+        >
           <div
             ref={role === 'user' ? userInputRef : null}
             className="whitespace-pre-wrap break-words"
@@ -52,6 +54,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               onClick={handleEditPrompt}
             >
               Edit
+            </div>
+          )}
+          {role === 'assistant' && (
+            <div className="bg-gray-100 py-2 px-4 mt-6 rounded-lg">
+              %ANSWER_INFO%
             </div>
           )}
         </div>
