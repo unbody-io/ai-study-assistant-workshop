@@ -140,19 +140,21 @@ export const SearchResult: React.FC<SearchResultProps> = ({
       </div>
       <div className="mt-8">
         {/* Checkbox group to select which file types to show */}
-        <div className={clsx('bg-gray-100 p-2 rounded-t-lg')}>
-          <CheckboxGroup
-            label="Select File types to show"
-            defaultValue={[...selectedCategories]}
-            onValueChange={setSelectedCategories}
-          >
-            <div className="flex w-full flex-wrap gap-12">
-              {fileCategories.map((category) => (
-                <Checkbox value={category}>{category}</Checkbox>
-              ))}
-            </div>
-          </CheckboxGroup>
-        </div>
+        {!hideList && (
+          <div className={clsx('bg-gray-100 p-2 rounded-t-lg')}>
+            <CheckboxGroup
+              label="Select File types to show"
+              defaultValue={[...selectedCategories]}
+              onValueChange={setSelectedCategories}
+            >
+              <div className="flex w-full flex-wrap gap-12">
+                {fileCategories.map((category) => (
+                  <Checkbox value={category}>{category}</Checkbox>
+                ))}
+              </div>
+            </CheckboxGroup>
+          </div>
+        )}
         <Divider />
 
         <Accordion

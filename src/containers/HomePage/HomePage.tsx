@@ -90,6 +90,7 @@ export const HomePage: React.FC<HomePageProps> = ({ className, ...props }) => {
       />
       <ChatMessages
         className="py-[20px]"
+        onEditPrompt={setPrompt}
         data={messages.map((msg) => ({
           role: msg.role,
           message: msg.message,
