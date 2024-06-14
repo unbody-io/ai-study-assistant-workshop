@@ -1,6 +1,8 @@
+import { FileType } from '@/types/data.types'
 import { Button, Input, InputProps } from '@nextui-org/react'
 import clsx from 'clsx'
 import React from 'react'
+import { SearchFilters } from '../SearchFilters'
 import { SearchIcon } from '../icons'
 
 export type SearchBarProps = Omit<
@@ -14,6 +16,8 @@ export type SearchBarProps = Omit<
 
   inputProps?: InputProps
   formProps?: React.HTMLProps<HTMLFormElement>
+  selectedFilters: FileType[]
+  onToggleFilters: (f: FileType[]) => void
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -24,6 +28,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   inputProps = {},
   formProps = {},
   className,
+  onToggleFilters,
+  selectedFilters,
   ...props
 }) => {
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,6 +67,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <SearchIcon />
         </Button>
       </form>
+      <SearchFilters
+        selectedFilters={selectedFilters}
+        onToggleFilter={onToggleFilters}
+        className="mt-2.5"
+      />
     </div>
   )
 }
