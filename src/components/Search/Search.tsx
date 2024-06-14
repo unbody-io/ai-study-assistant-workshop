@@ -1,5 +1,6 @@
 import { AnimatedText } from '@/components/AnimatedText'
 import { SearchBar } from '@/components/SearchBar'
+import { FileType } from '@/types/data.types'
 import clsx from 'clsx'
 import React from 'react'
 import { SearchResult, SearchResultProps } from '../SearchResult'
@@ -16,6 +17,9 @@ export type SearchProps = {
   onSelect?: SearchResultProps['onSelect']
 
   compact?: boolean
+
+  selectedFilters: FileType[]
+  onToggleFilters: (newValues: FileType[]) => void
 }
 
 export const Search: React.FC<SearchProps> = ({
@@ -27,6 +31,8 @@ export const Search: React.FC<SearchProps> = ({
   selectedFiles,
   onSelect,
   compact,
+  selectedFilters,
+  onToggleFilters,
 }) => {
   return (
     <div className="flex flex-col">
@@ -42,6 +48,8 @@ export const Search: React.FC<SearchProps> = ({
         onSubmit={() => {
           onSearch && onSearch(query || '')
         }}
+        selectedFilters={selectedFilters}
+        onToggleFilters={onToggleFilters}
       />
       <div>
         {typeof results !== 'undefined' && (
