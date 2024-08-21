@@ -171,7 +171,6 @@ export const SearchResult: React.FC<SearchResultProps> = ({
                         tags={item.tags}
                         excerpt={item.excerpt}
                         itemProps={{
-                          onPress: () => onCheckboxChange(item.id),
                           startContent: (
                             <>
                               <Checkbox
@@ -184,6 +183,7 @@ export const SearchResult: React.FC<SearchResultProps> = ({
                         }}
                         icon={<IconComponent />}
                         extension={item.extension || ''}
+                        fileData={item}
                       />
                     </div>
                   </div>

@@ -1,11 +1,14 @@
+import { FileData } from '@/types/data.types'
 import {
   Accordion,
   AccordionItem,
   AccordionItemProps,
   AccordionProps,
   Chip,
+  Selection,
 } from '@nextui-org/react'
-import React from 'react'
+import React, { useState } from 'react'
+import { PreviewBox } from '../PreviewBox/PreviewBox'
 
 export type FileCardProps = {
   name: string
@@ -13,8 +16,8 @@ export type FileCardProps = {
   icon: React.ReactNode
   excerpt?: string
   tags?: string[]
-
   itemProps?: Partial<AccordionItemProps>
+  fileData?: Partial<FileData>
 } & Partial<AccordionProps>
 
 export const FileCard: React.FC<FileCardProps> = ({
@@ -23,6 +26,7 @@ export const FileCard: React.FC<FileCardProps> = ({
   icon,
   tags,
   excerpt,
+  fileData,
   itemProps = {},
   ...props
 }) => {
@@ -70,16 +74,23 @@ export const FileCard: React.FC<FileCardProps> = ({
     </div>
   )
 
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
+
   return (
-    <Accordion selectedKeys={[]} isCompact {...props}>
+    <Accordion
+      selectedKeys={selectedKeys}
+      onSelectionChange={setSelectedKeys}
+      isCompact
+      {...props}
+    >
       <AccordionItem
-        disableAnimation
-        hideIndicator
         title={title}
         subtitle={subtitle}
         {...itemProps}
         startContent={startContent}
-      ></AccordionItem>
+      >
+        <PreviewBox {...fileData} />
+      </AccordionItem>
     </Accordion>
   )
 }

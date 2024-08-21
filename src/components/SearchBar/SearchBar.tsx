@@ -1,6 +1,8 @@
 import { Button, Input, InputProps } from '@nextui-org/react'
 import clsx from 'clsx'
 import React from 'react'
+import { SearchFilterItem } from '../SearchFilters'
+import { SearchFilters } from '../SearchFilters/SearchFilters'
 import { SearchIcon } from '../icons'
 
 export type SearchBarProps = Omit<
@@ -10,6 +12,9 @@ export type SearchBarProps = Omit<
   value?: string
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   onSubmit?: React.FormEventHandler<HTMLFormElement>
+
+  filters: SearchFilterItem[]
+  onFilterChange: (filter: SearchFilterItem[]) => void
   pending?: boolean
 
   inputProps?: InputProps
@@ -19,8 +24,10 @@ export type SearchBarProps = Omit<
 export const SearchBar: React.FC<SearchBarProps> = ({
   value,
   pending = false,
+  filters,
   onChange,
   onSubmit,
+  onFilterChange,
   inputProps = {},
   formProps = {},
   className,
@@ -61,6 +68,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <SearchIcon />
         </Button>
       </form>
+      <SearchFilters filterItems={filters} onFilterChange={onFilterChange} />
     </div>
   )
 }

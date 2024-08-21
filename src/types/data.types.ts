@@ -14,6 +14,7 @@ export type FileData = {
   tags?: string[]
   path: string[]
   extension?: string
+  url?: string
 
   children?: FileData[]
 

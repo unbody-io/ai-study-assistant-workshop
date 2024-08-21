@@ -12,6 +12,8 @@
     "format:staged": "pretty-quick --staged"
   },
   "dependencies": {
+    "@mux/mux-player": "^2.9.1",
+    "@mux/mux-player-react": "^2.9.1",
     "@nextui-org/react": "^2.4.1",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "4.36.1",

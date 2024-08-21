@@ -2,11 +2,15 @@ import { AnimatedText } from '@/components/AnimatedText'
 import { SearchBar } from '@/components/SearchBar'
 import clsx from 'clsx'
 import React from 'react'
+import { SearchFilterItem } from '../SearchFilters'
 import { SearchResult, SearchResultProps } from '../SearchResult'
 
 export type SearchProps = {
   query?: string
   onQueryChange?: (query: string) => void
+
+  filters: SearchFilterItem[]
+  onFilterChange: (filter: SearchFilterItem[]) => void
 
   searching?: boolean
   results?: SearchResultProps['files']
@@ -21,6 +25,8 @@ export type SearchProps = {
 export const Search: React.FC<SearchProps> = ({
   query,
   onQueryChange,
+  filters,
+  onFilterChange,
   searching,
   results,
   onSearch,
@@ -38,10 +44,12 @@ export const Search: React.FC<SearchProps> = ({
         )}
         value={query}
         pending={searching}
+        filters={filters}
         onChange={(e) => onQueryChange && onQueryChange(e.target.value)}
         onSubmit={() => {
           onSearch && onSearch(query || '')
         }}
+        onFilterChange={onFilterChange}
       />
       <div>
         {typeof results !== 'undefined' && (
